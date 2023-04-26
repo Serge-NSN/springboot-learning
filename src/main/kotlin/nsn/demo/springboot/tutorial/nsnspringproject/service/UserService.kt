@@ -17,17 +17,17 @@ class UserService {
     fun getAll(): List<UserModel> {
         return USERS
     }
-    fun getByEmail(email: String): UserModel {
-        var ans: UserModel? = null
-
-        for (elt in USERS) {
-            if (elt.email==email) {
-                ans = elt
-            }
-
-        }
-        return ans?: throw NoSuchElementException("User not found")
-    }
+//    fun getByEmail(email: String): UserModel {
+//        var ans: UserModel? = null
+//
+//        for (elt in USERS) {
+//            if (elt.email==email) {
+//                ans = elt
+//            }
+//
+//        }
+//        return ans?: throw NoSuchElementException("User not found")
+//    }
 
     fun getAllByAge(age: Int): List<UserModel>{
         var ans: MutableList<UserModel> = mutableListOf()
@@ -47,6 +47,10 @@ class UserService {
             }
         }
         return ans.toList()
+    }
+
+    fun getByEmail(email: String): UserModel {
+        return USERS.filter{ it.email == email }[0]
     }
 
     fun getUserByEmailPattern(pattern: String): List<UserModel> {

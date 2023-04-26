@@ -22,7 +22,7 @@ class UserController(
 
     @GetMapping("/user")
     fun getByEmail(@RequestParam("email") email: String? = null): UserModel {
-        return userService.getByEmail("serge@mail.com")
+        return userService.getByEmail(email?:"serge@mail.com")
     }
 
     @GetMapping("/age-mates")
