@@ -10,11 +10,12 @@ import jakarta.persistence.*
 data class UserEntity(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long?=null,
     val name: String = "",
     val email: String = "",
-    val age: Int=0
+    val age: Int=0,
+    val password: String = ""
 )
 
 

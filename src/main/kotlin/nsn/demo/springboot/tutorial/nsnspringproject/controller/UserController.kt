@@ -1,8 +1,10 @@
 package nsn.demo.springboot.tutorial.nsnspringproject.controller
 
+import nsn.demo.springboot.tutorial.nsnspringproject.controller.dto.UserDto
 import nsn.demo.springboot.tutorial.nsnspringproject.model.UserEntity
 import nsn.demo.springboot.tutorial.nsnspringproject.service.UserService
-import org.apache.catalina.User
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -12,24 +14,28 @@ class UserController(
     private val userService: UserService,
 ) {
     val e1 = UserEntity(name = "Dudu", email = "dudu@mail.com", age = 2)
-    val e2: List<UserEntity> = listOf(
-            UserEntity(name="Ten", email="ten@mail", age=10),
-            UserEntity(name="Twenty", email="twenty@mail", age=20),
-            UserEntity(name="Thirty", email="thirty@mail", age=30),
-            UserEntity(name="Forty", email="forty@mail", age=40),
-            UserEntity(name="Fifty", email="fifty@mail", age=50),
-            UserEntity(name="Twenty", email="twentycopy@mail", age=20),
+    val users: List<UserEntity> = listOf(
+            UserEntity(name="Ten", email="ten@mail", age=10, password = "ten10"),
+            UserEntity(name="Twenty", email="twenty@mail", age=20, password = "twenty20"),
+            UserEntity(name="Thirty", email="thirty@mail", age=30, password = "thirty30"),
+            UserEntity(name="Forty", email="forty@mail", age=40, password = "forty40"),
+            UserEntity(name="Fifty", email="fifty@mail", age=50, password = "fifty50"),
+            UserEntity(name="Twenty", email="twentycopy@mail", age=20, password = "twenty20"),
 
     )
 
-    @PostMapping("/save")
-    fun addEntity(): String {
-        for (elt in e2) {
-            userService.new(elt)
-        }
-        return "Added 6 new Entities!"
-    }
+//    @PostMapping("/register")
+//    fun registerUser(): String {
+//        for (user in users) {
+//            userService.register(user)
+//        }
+//        return "Added 6 new Entities!"
+//    }
 
+    @PostMapping("/register")
+    fun registerUser(@RequestBody  dto: UserDto): ResponseEntity<UserDto>{
+        return ResponseEntity(userService.register(dto), HttpStatus.CREATED)
+    }
 
     @GetMapping("/greater/{age}")
     fun getUsersByAgeLessThan(@PathVariable age: Int): List<UserEntity>{
@@ -54,6 +60,11 @@ class UserController(
     @GetMapping("/user/{email}")
     fun getByEmail(@PathVariable email: String): UserEntity{
         return userService.getUserByEmail(email)
+    }
+
+    @GetMapping("/login")
+    fun login(email: String, password: String){
+
     }
 }
 

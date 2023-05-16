@@ -1,11 +1,10 @@
 package nsn.demo.springboot.tutorial.nsnspringproject.service
 
 
+import nsn.demo.springboot.tutorial.nsnspringproject.controller.dto.UserDto
 import nsn.demo.springboot.tutorial.nsnspringproject.model.UserEntity
 import nsn.demo.springboot.tutorial.nsnspringproject.repository.UserRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.bind.annotation.RequestBody
 
 
 @Service
@@ -18,8 +17,6 @@ class UserService (
             UserEntity(name = "Thelma", email = "thelma@mail.com", age = 2),
             UserEntity(name = "Elroy", email = "elroy@mail.com", age = 22)
         )
-
-
 
     }
 
@@ -34,13 +31,22 @@ class UserService (
     fun getUserByEmail(email: String): UserEntity{
         return userRepository.findByEmail(email)
     }
-    fun new(new: UserEntity) = userRepository.save(new)
+    fun register(userDto: UserDto): UserDto {
+        val new = UserEntity(
+            id = userDto.id,
+            name = userDto.name,
+            email = userDto.email,
+            age = userDto.age,
+            password = userDto.password
+        )
 
-    fun getUsersByAgeGreaterThan(age: Int): List<UserEntity>{
-        return userRepository.findByAgeGreaterThan(age)
+        return UserDto(userRepository.save(new))
     }
 
 
 
+    fun getUsersByAgeGreaterThan(age: Int): List<UserEntity>{
+        return userRepository.findByAgeGreaterThan(age)
+    }
 
 }
