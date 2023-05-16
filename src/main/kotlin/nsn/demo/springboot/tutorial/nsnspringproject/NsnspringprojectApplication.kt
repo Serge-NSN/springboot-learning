@@ -11,7 +11,7 @@ import org.springframework.web.filter.CorsFilter
 class NsnspringprojectApplication {
 	@Bean
 	fun corsConfig(): CorsFilter {
-		val config = CorsConfiguration();
+		val config = CorsConfiguration()
 		config.addAllowedOrigin("http://192.168.142.99:54075")
 		config.addAllowedOrigin("http://localhost:54075")
 		config.addAllowedOrigin("http://127.0.0.1:54075")

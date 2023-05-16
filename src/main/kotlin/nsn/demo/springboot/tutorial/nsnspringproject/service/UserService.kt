@@ -1,59 +1,46 @@
 package nsn.demo.springboot.tutorial.nsnspringproject.service
 
-import nsn.demo.springboot.tutorial.nsnspringproject.model.UserModel
+
+import nsn.demo.springboot.tutorial.nsnspringproject.model.UserEntity
+import nsn.demo.springboot.tutorial.nsnspringproject.repository.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.RequestBody
 
 
 @Service
-class UserService {
+class UserService (
+    private val userRepository: UserRepository,
+){
     companion object {
-        val USERS = listOf(
-            UserModel(name = "Serge", email = "serge@mail.com", age = 2),
-            UserModel(name = "Thelma", email = "thelma@mail.com", age = 2),
-            UserModel(name = "Elroy", email = "elroy@mail.com", age = 22)
+        val USERS: List<UserEntity> = listOf(
+            UserEntity(name = "Serge", email = "serge@mail.com", age = 2),
+            UserEntity(name = "Thelma", email = "thelma@mail.com", age = 2),
+            UserEntity(name = "Elroy", email = "elroy@mail.com", age = 22)
         )
+
+
+
     }
 
-    fun getAll(): List<UserModel> {
-        return USERS
-    }
-//    fun getByEmail(email: String): UserModel {
-//        var ans: UserModel? = null
-//
-//        for (elt in USERS) {
-//            if (elt.email==email) {
-//                ans = elt
-//            }
-//
-//        }
-//        return ans?: throw NoSuchElementException("User not found")
-//    }
-
-    fun getAllByAge(age: Int): List<UserModel>{
-        var ans: MutableList<UserModel> = mutableListOf()
-        for (elt in USERS){
-            if (elt.age == age){
-                ans.add(elt)
-            }
-        }
-        return ans.toMutableList()
+    fun getAll(): List<UserEntity> {
+        return userRepository.findAll()
     }
 
-    fun getEmailContainingPattern(pattern: String): List<UserModel> {
-        val ans: MutableList<UserModel> = mutableListOf()
-        for (elt in USERS){
-            if(elt.email.contains(pattern)){
-                ans.add(elt)
-            }
-        }
-        return ans.toList()
+    fun getUserByName(name: String): List<UserEntity>{
+        return userRepository.findByName(name)
     }
 
-    fun getByEmail(email: String): UserModel {
-        return USERS.filter{ it.email == email }[0]
+    fun getUserByEmail(email: String): UserEntity{
+        return userRepository.findByEmail(email)
+    }
+    fun new(new: UserEntity) = userRepository.save(new)
+
+    fun getUsersByAgeGreaterThan(age: Int): List<UserEntity>{
+        return userRepository.findByAgeGreaterThan(age)
     }
 
-    fun getUserByEmailPattern(pattern: String): List<UserModel> {
-        return USERS.filter { it.email.contains(pattern) }
-    }
+
+
+
 }
