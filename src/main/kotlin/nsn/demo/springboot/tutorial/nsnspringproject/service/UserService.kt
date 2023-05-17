@@ -4,7 +4,12 @@ package nsn.demo.springboot.tutorial.nsnspringproject.service
 import nsn.demo.springboot.tutorial.nsnspringproject.controller.dto.UserDto
 import nsn.demo.springboot.tutorial.nsnspringproject.model.UserEntity
 import nsn.demo.springboot.tutorial.nsnspringproject.repository.UserRepository
+import org.apache.catalina.User
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.util.Optional
 
 
 @Service
@@ -28,7 +33,7 @@ class UserService (
         return userRepository.findByName(name)
     }
 
-    fun getUserByEmail(email: String): UserEntity{
+    fun getUserByEmail(email: String): Optional<UserEntity>{
         return userRepository.findByEmail(email)
     }
     fun register(userDto: UserDto): UserDto {
@@ -48,5 +53,29 @@ class UserService (
     fun getUsersByAgeGreaterThan(age: Int): List<UserEntity>{
         return userRepository.findByAgeGreaterThan(age)
     }
+
+    fun loginUser(email: String, password: String): ResponseEntity<UserEntity> {
+        val userOptional: Optional<UserEntity> = userRepository.findByEmail(email)
+
+        return if (userOptional.isEmpty) {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        } else {
+            val user: UserEntity = userOptional.get()
+
+            if (email == user.email && password == user.password) {
+                ResponseEntity(user, HttpStatus.FOUND)
+            } else {
+                ResponseEntity(HttpStatus.UNAUTHORIZED)
+            }
+        }
+    }
+
+//    fun checkUser(dto: UserDto): UserEntity {
+//        val loginDetail = UserEntity(
+//            email = dto.email,
+//            password = dto.password
+//        )
+//        if
+//    }
 
 }

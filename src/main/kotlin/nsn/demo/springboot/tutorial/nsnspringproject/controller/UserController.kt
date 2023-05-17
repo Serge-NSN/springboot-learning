@@ -6,6 +6,7 @@ import nsn.demo.springboot.tutorial.nsnspringproject.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.Optional
 
 @RestController
 @CrossOrigin
@@ -33,38 +34,38 @@ class UserController(
 //    }
 
     @PostMapping("/register")
-    fun registerUser(@RequestBody  dto: UserDto): ResponseEntity<UserDto>{
-        return ResponseEntity(userService.register(dto), HttpStatus.CREATED)
-    }
+    fun registerUser(@RequestBody  dto: UserDto): ResponseEntity<UserDto> = ResponseEntity(userService.register(dto), HttpStatus.CREATED)
+
 
     @GetMapping("/greater/{age}")
-    fun getUsersByAgeLessThan(@PathVariable age: Int): List<UserEntity>{
-        return userService.getUsersByAgeGreaterThan(age)
-    }
+    fun getUsersByAgeLessThan(@PathVariable age: Int): List<UserEntity> = userService.getUsersByAgeGreaterThan(age)
 
     @GetMapping("/all")
-    fun getAll(): List<UserEntity> {
-        return userService.getAll()
-    }
-
+    fun getAll(): List<UserEntity> = userService.getAll()
 //    @GetMapping("/user")
 //    fun getByEmail(@RequestParam("email") email: String? = null): UserEntity {
 //        return userService.getByEmail(email?:"serge@mail.com")
 //    }
 
     @GetMapping("/username/{name}")
-    fun getByName(@PathVariable name: String): List<UserEntity>{
-        return userService.getUserByName(name)
-    }
+    fun getByName(@PathVariable name: String): List<UserEntity> = userService.getUserByName(name)
 
     @GetMapping("/user/{email}")
-    fun getByEmail(@PathVariable email: String): UserEntity{
-        return userService.getUserByEmail(email)
+    fun getByEmail(@PathVariable email: String): Optional<UserEntity> = userService.getUserByEmail(email)
+
+    @PostMapping("/login")
+    fun login(
+        @RequestParam email: String,
+        @RequestParam password: String
+    ): ResponseEntity<UserEntity> {
+        return userService.loginUser(email, password)
     }
 
-    @GetMapping("/login")
-    fun login(email: String, password: String){
-
-    }
 }
+
+//    @GetMapping("/login")
+//    fun login(@RequestBody dto: UserDto): ResponseEntity<UserDto>{
+//        return ResponseEntity(userService.checkUser(dto), HttpStatus.NOT_FOUND)
+//    }
+//}
 
