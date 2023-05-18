@@ -12,10 +12,10 @@ data class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long?=null,
-    val name: String = "",
-    val email: String = "",
-    val age: Int=0,
-    val password: String = ""
+    var name: String = "",
+    var email: String = "",
+    var age: Int=0,
+    var password: String = ""
 )
 
 

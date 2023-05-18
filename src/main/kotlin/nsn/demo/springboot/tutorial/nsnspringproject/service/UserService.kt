@@ -74,6 +74,24 @@ class UserService (
         return userRepository.findById(id)
     }
 
+    fun updateUser(id: Long, dto: UserDto): ResponseEntity<UserDto> {
+
+        val userExistence: Optional<UserEntity> = userRepository.findById(id)
+
+        if (userExistence.isEmpty){
+            return ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+        else{
+            val user:  UserEntity = userExistence.get()
+            user.name = dto.name
+            user.email = dto.email
+            user.age = dto.age
+            user.password = dto.password
+            userRepository.save(user)
+            return ResponseEntity(UserDto(user), HttpStatus.OK)
+        }
+    }
+
 //    fun checkUser(dto: UserDto): UserEntity {
 //        val loginDetail = UserEntity(
 //            email = dto.email,

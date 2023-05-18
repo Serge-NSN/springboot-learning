@@ -27,21 +27,33 @@ class UserController(
         return userService.loginUser(email, password)
     }
 
+    //Update User
+    @PatchMapping("/update/{id}")
+    fun updateUser(@RequestBody dto: UserDto, @PathVariable id: Long): ResponseEntity<UserDto>{
+        return userService.updateUser(id, dto)
+    }
+
+    //Delete User
+    @DeleteMapping("/delete/{id}")
+    fun deleteUser(@PathVariable id: Long): ResponseEntity<String>{
+        return userService.deleteUser(id)
+    }
+
     //Get all users
     @GetMapping("/all")
     fun getAll(): List<UserEntity> = userService.getAll()
 //    @GetMapping("/user")
-//    fun getByEmail(@RequestParam("email") email: String? = null): UserEntity {
-//        return userService.getByEmail(email?:"serge@mail.com")
-//    }
 
-    //Get user by name
-    @GetMapping("/name/{name}")
-    fun getByName(@PathVariable name: String): List<UserEntity> = userService.getUserByName(name)
 
     //Get user by email
-    @GetMapping("/email/{email}")
-    fun getByEmail(@PathVariable email: String): Optional<UserEntity> = userService.getUserByEmail(email)
+    @GetMapping("/email")
+    fun getByEmail(@RequestParam("email") email: String? = null): Optional<UserEntity> {
+        return userService.getUserByEmail(email?:"serge@mail.com")
+    }
+
+    //Get user by name
+    @GetMapping("/name")
+    fun getByEmail(@RequestParam name: String): List<UserEntity> = userService.getUserByName(name)
 
     //Get user by id
     @GetMapping("/id/{id}")
