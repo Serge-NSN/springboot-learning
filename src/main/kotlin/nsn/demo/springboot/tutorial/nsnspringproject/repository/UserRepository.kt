@@ -10,4 +10,6 @@ interface UserRepository : JpaRepository<UserEntity, Long>{
     fun findByAgeGreaterThan(age:Int): List<UserEntity>
     fun findByName(name: String): List<UserEntity>
     fun findByEmail(email: String): Optional<UserEntity>
+
+
 }

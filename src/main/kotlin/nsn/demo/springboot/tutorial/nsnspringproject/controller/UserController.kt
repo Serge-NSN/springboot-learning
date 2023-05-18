@@ -10,49 +10,15 @@ import java.util.Optional
 
 @RestController
 @CrossOrigin
-@RequestMapping("/users")
+@RequestMapping("/api")
 class UserController(
     private val userService: UserService,
 ) {
-    val e1 = UserEntity(name = "Dudu", email = "dudu@mail.com", age = 2)
-    val users: List<UserEntity> = listOf(
-            UserEntity(name="Ten", email="ten@mail", age=10, password = "ten10"),
-            UserEntity(name="Twenty", email="twenty@mail", age=20, password = "twenty20"),
-            UserEntity(name="Thirty", email="thirty@mail", age=30, password = "thirty30"),
-            UserEntity(name="Forty", email="forty@mail", age=40, password = "forty40"),
-            UserEntity(name="Fifty", email="fifty@mail", age=50, password = "fifty50"),
-            UserEntity(name="Twenty", email="twentycopy@mail", age=20, password = "twenty20"),
-
-    )
-
-//    @PostMapping("/register")
-//    fun registerUser(): String {
-//        for (user in users) {
-//            userService.register(user)
-//        }
-//        return "Added 6 new Entities!"
-//    }
-
+    //Registration
     @PostMapping("/register")
     fun registerUser(@RequestBody  dto: UserDto): ResponseEntity<UserDto> = ResponseEntity(userService.register(dto), HttpStatus.CREATED)
 
-
-    @GetMapping("/greater/{age}")
-    fun getUsersByAgeLessThan(@PathVariable age: Int): List<UserEntity> = userService.getUsersByAgeGreaterThan(age)
-
-    @GetMapping("/all")
-    fun getAll(): List<UserEntity> = userService.getAll()
-//    @GetMapping("/user")
-//    fun getByEmail(@RequestParam("email") email: String? = null): UserEntity {
-//        return userService.getByEmail(email?:"serge@mail.com")
-//    }
-
-    @GetMapping("/username/{name}")
-    fun getByName(@PathVariable name: String): List<UserEntity> = userService.getUserByName(name)
-
-    @GetMapping("/user/{email}")
-    fun getByEmail(@PathVariable email: String): Optional<UserEntity> = userService.getUserByEmail(email)
-
+    //Login
     @PostMapping("/login")
     fun login(
         @RequestParam email: String,
@@ -60,6 +26,30 @@ class UserController(
     ): ResponseEntity<UserEntity> {
         return userService.loginUser(email, password)
     }
+
+    //Get all users
+    @GetMapping("/all")
+    fun getAll(): List<UserEntity> = userService.getAll()
+//    @GetMapping("/user")
+//    fun getByEmail(@RequestParam("email") email: String? = null): UserEntity {
+//        return userService.getByEmail(email?:"serge@mail.com")
+//    }
+
+    //Get user by name
+    @GetMapping("/name/{name}")
+    fun getByName(@PathVariable name: String): List<UserEntity> = userService.getUserByName(name)
+
+    //Get user by email
+    @GetMapping("/email/{email}")
+    fun getByEmail(@PathVariable email: String): Optional<UserEntity> = userService.getUserByEmail(email)
+
+    //Get user by id
+    @GetMapping("/id/{id}")
+    fun getById(@PathVariable id: Long): Optional<UserEntity> = userService.getUserById(id)
+
+    //Get users greater than a particular age
+    @GetMapping("/greater-than/{age}")
+    fun getUsersByAgeLessThan(@PathVariable age: Int): List<UserEntity> = userService.getUsersByAgeGreaterThan(age)
 
 }
 

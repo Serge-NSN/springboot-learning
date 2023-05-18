@@ -16,14 +16,14 @@ import java.util.Optional
 class UserService (
     private val userRepository: UserRepository,
 ){
-    companion object {
-        val USERS: List<UserEntity> = listOf(
-            UserEntity(name = "Serge", email = "serge@mail.com", age = 2),
-            UserEntity(name = "Thelma", email = "thelma@mail.com", age = 2),
-            UserEntity(name = "Elroy", email = "elroy@mail.com", age = 22)
-        )
-
-    }
+//    companion object {
+//        val USERS: List<UserEntity> = listOf(
+//            UserEntity(name = "Serge", email = "serge@mail.com", age = 2),
+//            UserEntity(name = "Thelma", email = "thelma@mail.com", age = 2),
+//            UserEntity(name = "Elroy", email = "elroy@mail.com", age = 22)
+//        )
+//
+//    }
 
     fun getAll(): List<UserEntity> {
         return userRepository.findAll()
@@ -68,6 +68,10 @@ class UserService (
                 ResponseEntity(HttpStatus.UNAUTHORIZED)
             }
         }
+    }
+
+    fun getUserById(id: Long): Optional<UserEntity> {
+        return userRepository.findById(id)
     }
 
 //    fun checkUser(dto: UserDto): UserEntity {
