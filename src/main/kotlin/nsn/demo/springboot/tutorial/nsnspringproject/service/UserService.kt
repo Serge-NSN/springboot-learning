@@ -92,6 +92,14 @@ class UserService (
         }
     }
 
+    fun deleteUser(id: Long): ResponseEntity<String> {
+        if(userRepository.findById(id).isEmpty){
+            return ResponseEntity("User Does not exist!", HttpStatus.NOT_FOUND)
+        }
+        userRepository.delete(userRepository.findById(id).get())
+        return ResponseEntity("Deleted User", HttpStatus.OK)
+    }
+
 //    fun checkUser(dto: UserDto): UserEntity {
 //        val loginDetail = UserEntity(
 //            email = dto.email,

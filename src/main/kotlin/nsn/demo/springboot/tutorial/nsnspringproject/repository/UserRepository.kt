@@ -12,4 +12,5 @@ interface UserRepository : JpaRepository<UserEntity, Long>{
     fun findByEmail(email: String): Optional<UserEntity>
 
 
+
 }
