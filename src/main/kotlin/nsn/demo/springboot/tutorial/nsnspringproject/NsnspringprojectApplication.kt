@@ -12,12 +12,13 @@ class NsnspringprojectApplication {
 	@Bean
 	fun corsConfig(): CorsFilter {
 		val config = CorsConfiguration()
-		config.addAllowedOrigin("http://192.168.142.99:54075")
-		config.addAllowedOrigin("http://localhost:54075")
-		config.addAllowedOrigin("http://127.0.0.1:54075")
+		config.addAllowedOrigin("http://192.168.65.99:4200")
+		config.addAllowedOrigin("http://localhost:4200")
+		config.addAllowedMethod("POST")
+		config.addAllowedMethod("GET")
 		config.addAllowedHeader("*")
 		val source = UrlBasedCorsConfigurationSource()
-		source.registerCorsConfiguration("/actuator/**", config)
+		source.registerCorsConfiguration("/**", config)
 		return CorsFilter(source)
 	}
 }

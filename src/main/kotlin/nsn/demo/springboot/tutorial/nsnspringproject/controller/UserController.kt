@@ -1,5 +1,6 @@
 package nsn.demo.springboot.tutorial.nsnspringproject.controller
 
+import nsn.demo.springboot.tutorial.nsnspringproject.controller.dto.LoginDto
 import nsn.demo.springboot.tutorial.nsnspringproject.controller.dto.UserDto
 import nsn.demo.springboot.tutorial.nsnspringproject.model.UserEntity
 import nsn.demo.springboot.tutorial.nsnspringproject.service.UserService
@@ -21,10 +22,9 @@ class UserController(
     //Login
     @PostMapping("/login")
     fun login(
-        @RequestParam email: String,
-        @RequestParam password: String
+        @RequestBody loginDto: LoginDto
     ): ResponseEntity<UserEntity> {
-        return userService.loginUser(email, password)
+        return userService.loginUser(loginDto)
     }
 
     //Update User
@@ -50,10 +50,6 @@ class UserController(
     fun getByEmail(@RequestParam("email") email: String? = null): Optional<UserEntity> {
         return userService.getUserByEmail(email?:"serge@mail.com")
     }
-
-    //Get user by name
-    @GetMapping("/name")
-    fun getByEmail(@RequestParam name: String): List<UserEntity> = userService.getUserByName(name)
 
     //Get user by id
     @GetMapping("/id/{id}")

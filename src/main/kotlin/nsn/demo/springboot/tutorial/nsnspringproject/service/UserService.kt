@@ -1,15 +1,15 @@
 package nsn.demo.springboot.tutorial.nsnspringproject.service
 
 
+import nsn.demo.springboot.tutorial.nsnspringproject.controller.dto.LoginDto
 import nsn.demo.springboot.tutorial.nsnspringproject.controller.dto.UserDto
 import nsn.demo.springboot.tutorial.nsnspringproject.model.UserEntity
 import nsn.demo.springboot.tutorial.nsnspringproject.repository.UserRepository
-import org.apache.catalina.User
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.Optional
+import java.util.*
 
 
 @Service
@@ -42,7 +42,7 @@ class UserService (
             name = userDto.name,
             email = userDto.email,
             age = userDto.age,
-            password = userDto.password
+            password = BCryptPasswordEncoder().encode(userDto.password)
         )
 
         return UserDto(userRepository.save(new))
@@ -54,16 +54,16 @@ class UserService (
         return userRepository.findByAgeGreaterThan(age)
     }
 
-    fun loginUser(email: String, password: String): ResponseEntity<UserEntity> {
-        val userOptional: Optional<UserEntity> = userRepository.findByEmail(email)
+    fun loginUser(loginDto: LoginDto): ResponseEntity<UserEntity> {
+        val user: Optional<UserEntity> = userRepository.findByEmail(loginDto.email)
 
-        return if (userOptional.isEmpty) {
+        return if (user.isEmpty) {
             ResponseEntity(HttpStatus.NOT_FOUND)
         } else {
-            val user: UserEntity = userOptional.get()
-
-            if (email == user.email && password == user.password) {
-                ResponseEntity(user, HttpStatus.FOUND)
+            val userInfo: UserEntity = user.get()
+            val hashedPassword = BCryptPasswordEncoder().encode(loginDto.password)
+            if ( loginDto.email == userInfo.email  && BCryptPasswordEncoder().matches(loginDto.password, userInfo.password)) {
+                ResponseEntity(userInfo, HttpStatus.OK)
             } else {
                 ResponseEntity(HttpStatus.UNAUTHORIZED)
             }
@@ -99,6 +99,7 @@ class UserService (
         userRepository.delete(userRepository.findById(id).get())
         return ResponseEntity("Deleted User", HttpStatus.OK)
     }
+
 
 //    fun checkUser(dto: UserDto): UserEntity {
 //        val loginDetail = UserEntity(
